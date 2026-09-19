@@ -1,0 +1,6 @@
+{
+  "name": "Dinas Kependudukan dan Pencatatan Sipil Kabupaten Keerom",
+  "description": "Portal Informasi Data Agregat Dinas Kependudukan dan Pencatatan Sipil Kabupaten Keerom (Jl. Trans Irian - Arso Kota) menyajikan statistik agregat kependudukan, KTP-el, akta kelahiran & kematian.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
