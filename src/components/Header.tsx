@@ -307,120 +307,31 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </nav>
 
-          {/* Quick Data Operations (Excel Upload & Google Sheets) */}
+          {/* Action Operations */}
           <div className="flex items-center gap-2 overflow-x-auto py-0.5 self-start md:self-auto shrink-0">
             {/* Dashboard Admin Button */}
             {onToggleAdmin && (
               <button
                 id="btn-toggle-admin"
                 onClick={onToggleAdmin}
-                title="Akses Dashboard Admin Disdukcapil (Unggah Bagan Organisasi, Edit Pejabat, Kelola Data SIAK)"
+                title={isAdminView ? "Kembali ke Tampilan Publik" : "Akses Dashboard Admin Disdukcapil (Dengan Proteksi Sandi)"}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs shrink-0 ${
                   isAdminView
                     ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-black ring-2 ring-amber-300'
-                    : 'bg-slate-800 hover:bg-slate-750 text-amber-300 border border-amber-500/40 hover:border-amber-400'
+                    : 'bg-emerald-700/90 hover:bg-emerald-600 text-white border border-emerald-500/50 shadow-md'
                 }`}
               >
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>{isAdminView ? 'Mode Publik' : 'Dashboard Admin'}</span>
+                <span>{isAdminView ? 'Kembali ke Mode Publik' : 'Dashboard Admin'}</span>
               </button>
             )}
 
-            {/* Upload Excel Button */}
-            <button
-              id="btn-upload-excel"
-              onClick={onOpenExcelUpload}
-              title="Upload file Excel / CSV data kependudukan"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-500 text-white transition-all cursor-pointer shadow-xs shrink-0"
-            >
-              <UploadCloud className="w-3.5 h-3.5" />
-              <span>Upload Data Excel</span>
-            </button>
-
-            {/* Google Sheets Integration */}
-            {user ? (
-              <div className="flex items-center gap-1.5 shrink-0">
-                {sheetConfig ? (
-                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-slate-200">
-                    <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span className="font-semibold text-[11px] truncate max-w-[100px] sm:max-w-[140px] text-white">
-                      {sheetConfig.spreadsheetTitle}
-                    </span>
-                    <a
-                      href={sheetConfig.spreadsheetUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title="Buka Spreadsheet"
-                      className="p-1 hover:bg-slate-700 text-slate-300 hover:text-white rounded transition-colors"
-                    >
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  </div>
-                ) : (
-                  <button
-                    onClick={onOpenSheetConfig}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition-colors cursor-pointer"
-                  >
-                    <FileSpreadsheet className="w-3.5 h-3.5" />
-                    <span>Hubungkan Sheet</span>
-                  </button>
-                )}
-
-                {/* Sync Button */}
-                <button
-                  id="btn-sync-sheets"
-                  onClick={onSync}
-                  disabled={isSyncing || !sheetConfig}
-                  title="Sinkronkan dengan Google Sheets"
-                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs font-bold transition-all cursor-pointer"
-                >
-                  <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />
-                  <span className="hidden sm:inline">{isSyncing ? 'Sinkron...' : 'Sinkron'}</span>
-                </button>
-
-                {/* Config Modal Trigger */}
-                <button
-                  onClick={onOpenSheetConfig}
-                  title="Pengaturan Spreadsheet"
-                  className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors cursor-pointer"
-                >
-                  <Settings className="w-3.5 h-3.5" />
-                </button>
-
-                {/* User Avatar & Logout */}
-                <div className="flex items-center gap-1.5 pl-1.5 border-l border-slate-800">
-                  {user.photoURL ? (
-                    <img
-                      src={user.photoURL}
-                      alt={user.displayName || 'User'}
-                      referrerPolicy="no-referrer"
-                      className="w-6 h-6 rounded-full ring-1 ring-emerald-500"
-                    />
-                  ) : (
-                    <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs">
-                      <UserIcon className="w-3 h-3 text-slate-300" />
-                    </div>
-                  )}
-                  <button
-                    onClick={onLogout}
-                    title="Keluar"
-                    className="p-1 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded transition-colors cursor-pointer"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button
-                id="btn-google-sign-in"
-                onClick={onLogin}
-                disabled={isLoggingIn}
-                title="Hubungkan Google Sheets"
-                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 transition-all cursor-pointer shrink-0 disabled:opacity-60"
-              >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="hidden sm:inline">{isLoggingIn ? 'Menghubungkan...' : 'Google Sheets'}</span>
-              </button>
+            {/* If in admin view, show active badge */}
+            {isAdminView && (
+              <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-950 border border-emerald-700/60 text-[11px] font-mono text-emerald-300 font-bold">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Panel Administrator Aktif</span>
+              </span>
             )}
           </div>
         </div>

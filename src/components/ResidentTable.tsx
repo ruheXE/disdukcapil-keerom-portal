@@ -111,30 +111,15 @@ export const ResidentTable: React.FC<ResidentTableProps> = ({
             Menampilkan <b>{filteredResidents.length}</b> dari {residents.length} jiwa
           </span>
 
-          {onOpenExcelUpload && (
+          {isAdmin && onOpenExcelUpload && (
             <button
               type="button"
-              onClick={() => {
-                if (!isAdmin) {
-                  onAccessDenied?.('Mengupload Data Excel');
-                  return;
-                }
-                onOpenExcelUpload();
-              }}
-              title={isAdmin ? 'Upload file Excel / CSV data kependudukan' : 'Terkunci: Hanya role Admin yang dapat mengupload data Excel'}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                isAdmin
-                  ? 'bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200 shadow-xs'
-                  : 'bg-slate-100 text-slate-400 border border-slate-200'
-              }`}
+              onClick={onOpenExcelUpload}
+              title="Upload file Excel / CSV data kependudukan"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200 shadow-xs"
             >
-              {isAdmin ? (
-                <UploadCloud className="w-3.5 h-3.5 text-teal-600" />
-              ) : (
-                <Lock className="w-3.5 h-3.5 text-amber-500" />
-              )}
+              <UploadCloud className="w-3.5 h-3.5 text-teal-600" />
               <span>Upload Excel</span>
-              {!isAdmin && <span className="text-[10px] text-amber-600 font-mono">(Admin)</span>}
             </button>
           )}
         </div>

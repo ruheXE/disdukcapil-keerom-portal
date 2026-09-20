@@ -32,7 +32,6 @@ import {
 import { Resident, DukcapilAggregates, DistrictAggregate, VillageAggregate } from '../types/population';
 import { OrgChartConfig } from '../types/organization';
 import { computeDukcapilAggregates } from '../services/aggregateService';
-import { generateAggregatePdfReport } from '../services/aggregatePdfReport';
 import { VitalTrendChart } from './VitalTrendChart';
 import { KeeromDistrictMap } from './KeeromDistrictMap';
 import { PublicOrgChartView } from './PublicOrgChartView';
@@ -84,42 +83,8 @@ export const PublicAggregateDashboard: React.FC<PublicAggregateDashboardProps> =
     return aggregates.districts.map(d => d.districtName);
   }, [aggregates.districts]);
 
-  // PDF Generation State & Handler
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
-  const [pdfSuccessMessage, setPdfSuccessMessage] = useState<string | null>(null);
-
-  const handleDownloadPdf = () => {
-    try {
-      setIsGeneratingPdf(true);
-      setPdfSuccessMessage(null);
-      setTimeout(() => {
-        generateAggregatePdfReport(aggregates, residents);
-        setIsGeneratingPdf(false);
-        setPdfSuccessMessage('Laporan Agregat Resmi Kabupaten Keerom format PDF berhasil diunduh!');
-        setTimeout(() => setPdfSuccessMessage(null), 4500);
-      }, 300);
-    } catch (err) {
-      console.error('Gagal mencetak laporan PDF:', err);
-      setIsGeneratingPdf(false);
-    }
-  };
-
   return (
     <div className="space-y-6">
-      {/* Toast Notifikasi Unduh PDF */}
-      <AnimatePresence>
-        {pdfSuccessMessage && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed top-4 right-4 z-50 bg-emerald-800 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-emerald-600 max-w-md"
-          >
-            <CheckCircle2 className="w-5 h-5 text-emerald-300 shrink-0" />
-            <span className="text-xs font-semibold leading-relaxed">{pdfSuccessMessage}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
       {/* Public Civic Info Banner (Logos removed as requested) */}
       <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-emerald-950 text-white rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl relative overflow-hidden">
         <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -174,27 +139,6 @@ export const PublicAggregateDashboard: React.FC<PublicAggregateDashboardProps> =
               <ShieldCheck className="w-3 h-3" />
               <span>Portal Terbuka Kependudukan Warga</span>
             </div>
-
-            {/* Tombol Unduh Laporan PDF Agregat */}
-            <button
-              id="btn-download-pdf-hero"
-              onClick={handleDownloadPdf}
-              disabled={isGeneratingPdf}
-              className="mt-2 inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer w-full sm:w-auto disabled:opacity-60"
-              title="Unduh Laporan Agregat Resmi Format PDF"
-            >
-              {isGeneratingPdf ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Membuat Dokumen...</span>
-                </>
-              ) : (
-                <>
-                  <FileDown className="w-4 h-4 text-emerald-200" />
-                  <span>Unduh Laporan PDF (Resmi)</span>
-                </>
-              )}
-            </button>
           </div>
         </div>
 
@@ -325,30 +269,6 @@ export const PublicAggregateDashboard: React.FC<PublicAggregateDashboardProps> =
               <span>Struktur Organisasi</span>
             </span>
           </button>
-
-          {/* Action Unduh PDF di Tab Navigasi */}
-          <div className="ml-auto pl-2">
-            <button
-              id="btn-download-pdf-subnav"
-              onClick={handleDownloadPdf}
-              disabled={isGeneratingPdf}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-xs hover:shadow-md cursor-pointer disabled:opacity-60 shrink-0"
-              title="Unduh laporan lengkap data agregat kependudukan format PDF resmi"
-            >
-              {isGeneratingPdf ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span className="hidden sm:inline">Membuat PDF...</span>
-                </>
-              ) : (
-                <>
-                  <FileDown className="w-3.5 h-3.5 text-emerald-200" />
-                  <span className="hidden sm:inline">Unduh Laporan PDF</span>
-                  <span className="sm:hidden">PDF</span>
-                </>
-              )}
-            </button>
-          </div>
         </div>
       </div>
 

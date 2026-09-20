@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { User } from 'firebase/auth';
 import { OrgChartConfig } from '../types/organization';
-import { Resident, UserRole } from '../types/population';
+import { Resident, GoogleSheetConfig } from '../types/population';
 import { AdminOrgChartManager } from './AdminOrgChartManager';
 import { ResidentTable } from './ResidentTable';
+import { computeDukcapilAggregates } from '../services/aggregateService';
+import { generateAggregatePdfReport } from '../services/aggregatePdfReport';
+import { exportResidentsToCsv } from '../utils/exportCsv';
 import { 
   Building2, 
   Users, 
@@ -22,7 +26,19 @@ import {
   AlertCircle,
   RotateCcw,
   LogOut,
-  ShieldAlert
+  ShieldAlert,
+  FileDown,
+  Download,
+  Database,
+  RefreshCw,
+  ExternalLink,
+  Settings,
+  User as UserIcon,
+  FileCheck,
+  FileText,
+  Loader2,
+  HardDriveDownload,
+  FolderSync
 } from 'lucide-react';
 import { 
   changeAdminPassword, 
@@ -42,6 +58,15 @@ interface AdminDashboardProps {
   onEditResident?: (resident: Resident) => void;
   onDeleteResident?: (resident: Resident) => void;
   onViewFamily?: (noKk: string) => void;
+  sheetConfig?: GoogleSheetConfig | null;
+  user?: User | null;
+  token?: string | null;
+  isSyncing?: boolean;
+  onOpenSheetConfig?: () => void;
+  onSync?: () => void;
+  onLogin?: () => void;
+  onLogout?: () => void;
+  isLoggingIn?: boolean;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -54,8 +79,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onEditResident,
   onDeleteResident,
   onViewFamily,
+  sheetConfig,
+  user,
+  token,
+  isSyncing = false,
+  onOpenSheetConfig,
+  onSync,
+  onLogin,
+  onLogout,
+  isLoggingIn = false,
 }) => {
-  const [adminTab, setAdminTab] = useState<'orgChart' | 'residents' | 'security'>('orgChart');
+  const [adminTab, setAdminTab] = useState<'orgChart' | 'residents' | 'dataHub' | 'security'>('orgChart');
 
   // Password change form state
   const [oldPassword, setOldPassword] = useState('');
@@ -65,9 +99,43 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [showNewPw, setShowNewPw] = useState(false);
   const [pwdMessage, setPwdMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // PDF & Export State
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
+  const [exportNotice, setExportNotice] = useState<string | null>(null);
+
+  const aggregates = useMemo(() => {
+    return computeDukcapilAggregates(residents);
+  }, [residents]);
+
   const handleLogoutAdmin = () => {
     logoutAdminSession();
     onExitAdmin();
+  };
+
+  const handleDownloadPdf = () => {
+    try {
+      setIsGeneratingPdf(true);
+      setExportNotice(null);
+      setTimeout(() => {
+        generateAggregatePdfReport(aggregates, residents);
+        setIsGeneratingPdf(false);
+        setExportNotice('Laporan Agregat Resmi Kabupaten Keerom format PDF berhasil diunduh!');
+        setTimeout(() => setExportNotice(null), 5000);
+      }, 300);
+    } catch (err) {
+      console.error('Gagal mencetak laporan PDF:', err);
+      setIsGeneratingPdf(false);
+    }
+  };
+
+  const handleExportCsv = () => {
+    try {
+      exportResidentsToCsv(residents, `data-siak-keerom-${new Date().toISOString().slice(0, 10)}.csv`);
+      setExportNotice(`Berhasil mengekspor ${residents.length} data penduduk ke format Excel/CSV!`);
+      setTimeout(() => setExportNotice(null), 5000);
+    } catch (err) {
+      console.error('Gagal mengekspor CSV:', err);
+    }
   };
 
   const handleChangePasswordSubmit = (e: React.FormEvent) => {
@@ -115,6 +183,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Toast Notifikasi Ekspor/Unduh */}
+      <AnimatePresence>
+        {exportNotice && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-4 right-4 z-50 bg-emerald-800 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-emerald-600 max-w-md"
+          >
+            <CheckCircle2 className="w-5 h-5 text-emerald-300 shrink-0" />
+            <span className="text-xs font-semibold leading-relaxed">{exportNotice}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Top Admin Navigation & Status Banner */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -209,6 +292,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </button>
 
         <button
+          onClick={() => setAdminTab('dataHub')}
+          className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors shrink-0 cursor-pointer ${
+            adminTab === 'dataHub'
+              ? 'text-white'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+          }`}
+        >
+          {adminTab === 'dataHub' && (
+            <motion.div
+              layoutId="adminTabIndicator"
+              className="absolute inset-0 bg-emerald-600 rounded-xl shadow-xs"
+              transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+            />
+          )}
+          <span className="relative z-10 flex items-center gap-2">
+            <HardDriveDownload className="w-4 h-4" />
+            <span>Pusat Upload & Unduh Data</span>
+          </span>
+        </button>
+
+        <button
           onClick={() => setAdminTab('security')}
           className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors shrink-0 cursor-pointer ${
             adminTab === 'security'
@@ -248,24 +352,45 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             />
           ) : adminTab === 'residents' ? (
             <div className="space-y-4">
-              <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex items-center justify-between gap-4">
+              <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="font-extrabold text-slate-900 text-base">
-                    Manajemen Data Agregat & Induk Penduduk
+                    Manajemen Data Agregat & Induk Penduduk (SIAK)
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Pencarian, pemutakhiran NIK, verifikasi status rekam KTP-el, serta kepemilikan Akta Kelahiran
+                    Pencarian NIK/KK, pemutakhiran status rekam KTP-el, serta verifikasi kepemilikan Akta Catatan Sipil
                   </p>
                 </div>
-                {onOpenExcelUpload && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  {onOpenExcelUpload && (
+                    <button
+                      onClick={onOpenExcelUpload}
+                      className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-500 text-white transition-all cursor-pointer shadow-xs"
+                    >
+                      <UploadCloud className="w-4 h-4" />
+                      <span>Upload Data Excel</span>
+                    </button>
+                  )}
                   <button
-                    onClick={onOpenExcelUpload}
-                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-500 text-white transition-all cursor-pointer shadow-xs shrink-0"
+                    onClick={handleExportCsv}
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xs"
                   >
-                    <UploadCloud className="w-4 h-4" />
-                    <span>Upload Data Excel</span>
+                    <Download className="w-4 h-4 text-emerald-400" />
+                    <span>Ekspor CSV</span>
                   </button>
-                )}
+                  <button
+                    onClick={handleDownloadPdf}
+                    disabled={isGeneratingPdf}
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-700 hover:bg-emerald-600 text-white transition-all cursor-pointer shadow-xs disabled:opacity-60"
+                  >
+                    {isGeneratingPdf ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <FileDown className="w-4 h-4 text-emerald-200" />
+                    )}
+                    <span>Unduh PDF</span>
+                  </button>
+                </div>
               </div>
 
               <ResidentTable
@@ -277,6 +402,311 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 onViewFamily={onViewFamily || (() => {})}
                 onOpenExcelUpload={onOpenExcelUpload}
               />
+            </div>
+          ) : adminTab === 'dataHub' ? (
+            /* PUSAT UPLOAD DAN UNDUH DATA KHUSUS ADMIN */
+            <div className="space-y-6">
+              {/* Header Box */}
+              <div className="bg-gradient-to-br from-slate-900 via-slate-850 to-emerald-950 text-white rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-black px-2.5 py-0.5 rounded-md uppercase">
+                        PUSAT OPERASI DATA ADMIN
+                      </span>
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-black text-white mt-1.5">
+                      Pusat Unggah (Upload) & Ekspor (Unduh) Data
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                      Kelola sinkronisasi Google Sheets, impor data Excel/CSV, serta cetak laporan resmi PDF dan unduhan database kependudukan Kabupaten Keerom.
+                    </p>
+                  </div>
+                  <div className="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80 text-left sm:text-right shrink-0">
+                    <span className="text-[11px] text-slate-400 block">Total Data Terdata</span>
+                    <span className="text-xl font-black text-emerald-400 font-mono">
+                      {residents.length.toLocaleString('id-ID')} Jiwa
+                    </span>
+                    <span className="text-[10px] text-slate-400 block mt-0.5">
+                      {aggregates.districts.length} Distrik • {aggregates.villages.length} Kampung
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid 2 Kolom: Kiri = Unduh/Ekspor, Kanan = Upload/Sinkronisasi */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                {/* KOLOM 1: FITUR UNDUH & EKSPOR DATA */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-slate-900 font-extrabold text-base">
+                    <Download className="w-5 h-5 text-emerald-700" />
+                    <span>Fitur Unduh & Ekspor Dokumen Resmi</span>
+                  </div>
+
+                  {/* Card 1: Unduh Laporan PDF Agregat Resmi */}
+                  <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 hover:border-emerald-300 transition-all">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold shrink-0">
+                          <FileText className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm sm:text-base">
+                            Laporan Agregat Resmi (Format PDF)
+                          </h4>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            Dokumen cetak A4 resmi berlogo daerah, statistik distrik, KTP-el, & akta kelahiran
+                          </p>
+                        </div>
+                      </div>
+                      <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                        PDF RESMI
+                      </span>
+                    </div>
+
+                    <div className="bg-slate-50 p-3.5 rounded-2xl text-xs text-slate-600 border border-slate-100 space-y-1">
+                      <div className="flex justify-between">
+                        <span>Cakupan Wilayah:</span>
+                        <span className="font-semibold text-slate-800">{aggregates.districts.length} Distrik se-Keerom</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Format Dokumen:</span>
+                        <span className="font-semibold text-slate-800">Portable Document Format (.pdf)</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={handleDownloadPdf}
+                      disabled={isGeneratingPdf}
+                      className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-600 hover:to-teal-600 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
+                    >
+                      {isGeneratingPdf ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Menyusun Dokumen PDF...</span>
+                        </>
+                      ) : (
+                        <>
+                          <FileDown className="w-4 h-4 text-emerald-200" />
+                          <span>Unduh Laporan Agregat PDF</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Card 2: Ekspor Database Kependudukan ke Excel / CSV */}
+                  <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 hover:border-emerald-300 transition-all">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-800 flex items-center justify-center font-bold shrink-0">
+                          <FileSpreadsheet className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm sm:text-base">
+                            Ekspor Database Penduduk (Excel / CSV)
+                          </h4>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            Unduh seluruh {residents.length} baris master data penduduk lengkap dengan NIK, KK, & status vital
+                          </p>
+                        </div>
+                      </div>
+                      <span className="bg-teal-100 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                        CSV / EXCEL
+                      </span>
+                    </div>
+
+                    <div className="bg-slate-50 p-3.5 rounded-2xl text-xs text-slate-600 border border-slate-100 space-y-1">
+                      <div className="flex justify-between">
+                        <span>Total Baris Data:</span>
+                        <span className="font-semibold text-slate-800">{residents.length} Record Penduduk</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Kompatibilitas:</span>
+                        <span className="font-semibold text-slate-800">Microsoft Excel, LibreOffice, Sheets</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={handleExportCsv}
+                      className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      <Download className="w-4 h-4 text-emerald-400" />
+                      <span>Unduh Database (Format CSV)</span>
+                    </button>
+                  </div>
+
+                  {/* Card 3: Unduh Dokumen Bagan Struktur Organisasi */}
+                  {orgChartConfig.chartImageUrl && (
+                    <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 hover:border-emerald-300 transition-all">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-800 flex items-center justify-center font-bold shrink-0">
+                            <Building2 className="w-6 h-6" />
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-slate-900 text-sm sm:text-base">
+                              Bagan Struktur Organisasi Disdukcapil
+                            </h4>
+                            <p className="text-xs text-slate-500 mt-0.5">
+                              Unduh salinan gambar resolusi tinggi bagan struktur organisasi resmi
+                            </p>
+                          </div>
+                        </div>
+                        <span className="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                          GAMBAR HD
+                        </span>
+                      </div>
+
+                      <a
+                        href={orgChartConfig.chartImageUrl}
+                        download={orgChartConfig.chartImageName || 'bagan-organisasi-disdukcapil-keerom.png'}
+                        className="w-full py-2.5 px-4 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2"
+                      >
+                        <Download className="w-4 h-4 text-indigo-200" />
+                        <span>Unduh Dokumen Gambar Bagan</span>
+                      </a>
+                    </div>
+                  )}
+                </div>
+
+                {/* KOLOM 2: FITUR UPLOAD & SINKRONISASI DATA */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-slate-900 font-extrabold text-base">
+                    <UploadCloud className="w-5 h-5 text-teal-700" />
+                    <span>Fitur Unggah & Sinkronisasi Data</span>
+                  </div>
+
+                  {/* Card 1: Upload File Excel / CSV */}
+                  <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 hover:border-teal-300 transition-all">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-800 flex items-center justify-center font-bold shrink-0">
+                          <UploadCloud className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm sm:text-base">
+                            Unggah Berkas Excel / CSV (.xlsx, .csv)
+                          </h4>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            Impor data penduduk baru atau perbarui database kependudukan secara massal
+                          </p>
+                        </div>
+                      </div>
+                      <span className="bg-teal-100 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                        IMPOR MASSAL
+                      </span>
+                    </div>
+
+                    <div className="bg-slate-50 p-3.5 rounded-2xl text-xs text-slate-600 border border-slate-100 space-y-1">
+                      <div className="flex justify-between">
+                        <span>Format Didukung:</span>
+                        <span className="font-semibold text-slate-800">.xlsx, .xls, .csv</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Validasi Otomatis:</span>
+                        <span className="font-semibold text-emerald-700">Pengecekan NIK 16 Digit & KK</span>
+                      </div>
+                    </div>
+
+                    {onOpenExcelUpload && (
+                      <button
+                        onClick={onOpenExcelUpload}
+                        className="w-full py-2.5 px-4 rounded-xl bg-teal-700 hover:bg-teal-600 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2"
+                      >
+                        <UploadCloud className="w-4 h-4 text-teal-200" />
+                        <span>Buka Menu Unggah File Excel</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Card 2: Google Sheets Integrasi & Sinkronisasi */}
+                  <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 hover:border-emerald-300 transition-all">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold shrink-0">
+                          <FolderSync className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm sm:text-base">
+                            Integrasi Google Sheets Disdukcapil
+                          </h4>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            Sinkronisasi dua arah real-time dengan Google Spreadsheet resmi
+                          </p>
+                        </div>
+                      </div>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                        sheetConfig ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+                      }`}>
+                        {sheetConfig ? 'TERHUBUNG' : 'BELUM TERHUBUNG'}
+                      </span>
+                    </div>
+
+                    {sheetConfig ? (
+                      <div className="bg-slate-50 p-3.5 rounded-2xl text-xs text-slate-600 border border-slate-100 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-500">Spreadsheet Aktif:</span>
+                          <span className="font-bold text-slate-900 truncate max-w-[180px]">
+                            {sheetConfig.spreadsheetTitle}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-500">Akses Tautan:</span>
+                          <a
+                            href={sheetConfig.spreadsheetUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-emerald-700 hover:text-emerald-800 font-bold inline-flex items-center gap-1"
+                          >
+                            <span>Buka di Tab Baru</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-amber-50 p-3.5 rounded-2xl text-xs text-amber-900 border border-amber-200">
+                        Spreadsheet Google belum terhubung. Hubungkan spreadsheet untuk mengaktifkan sinkronisasi otomatis.
+                      </div>
+                    )}
+
+                    <div className="flex flex-col sm:flex-row items-center gap-2 pt-1">
+                      {user && onSync && sheetConfig && (
+                        <button
+                          onClick={onSync}
+                          disabled={isSyncing}
+                          className="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
+                        >
+                          <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                          <span>{isSyncing ? 'Sedang Sinkron...' : 'Sinkronkan Sekarang'}</span>
+                        </button>
+                      )}
+
+                      {onOpenSheetConfig && (
+                        <button
+                          onClick={onOpenSheetConfig}
+                          className="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2"
+                        >
+                          <Settings className="w-4 h-4 text-slate-400" />
+                          <span>{sheetConfig ? 'Pengaturan Sheet' : 'Hubungkan Spreadsheet'}</span>
+                        </button>
+                      )}
+
+                      {!user && onLogin && (
+                        <button
+                          onClick={onLogin}
+                          disabled={isLoggingIn}
+                          className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-850 text-white text-xs font-bold shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
+                        >
+                          <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+                          <span>{isLoggingIn ? 'Menghubungkan...' : 'Masuk Akun Google'}</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
           ) : (
             /* SECURITY & PASSWORD MANAGEMENT TAB */
@@ -327,6 +757,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         onChange={(e) => setOldPassword(e.target.value)}
                         placeholder="Masukkan kata sandi saat ini"
                         className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
+                        required
                       />
                       <button
                         type="button"
@@ -351,6 +782,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder="Masukkan kata sandi baru"
                         className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
+                        required
                       />
                       <button
                         type="button"
@@ -375,6 +807,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="Ulangi kata sandi baru"
                         className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-mono"
+                        required
                       />
                     </div>
                   </div>

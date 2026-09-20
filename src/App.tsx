@@ -302,6 +302,15 @@ export default function App() {
                 onExitAdmin={() => setIsAdminView(false)}
                 onOpenExcelUpload={() => setIsExcelUploadOpen(true)}
                 onDeleteResident={(r) => setResidents(prev => prev.filter(res => res.id !== r.id))}
+                sheetConfig={sheetConfig}
+                user={user}
+                token={token}
+                isSyncing={isSyncing}
+                onOpenSheetConfig={() => setIsSheetConfigOpen(true)}
+                onSync={handleManualSync}
+                onLogin={handleLogin}
+                onLogout={handleLogout}
+                isLoggingIn={isLoggingIn}
               />
             </motion.div>
           ) : (
