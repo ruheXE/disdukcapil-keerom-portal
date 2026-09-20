@@ -4,12 +4,14 @@ import { User } from 'firebase/auth';
 import { Header, HeaderTabType } from './components/Header';
 import { PublicAggregateDashboard } from './components/PublicAggregateDashboard';
 import { AdminDashboard } from './components/AdminDashboard';
+import { AdminLoginModal } from './components/AdminLoginModal';
 import { GoogleSheetConfigModal } from './components/GoogleSheetConfigModal';
 import { ExcelUploadModal } from './components/ExcelUploadModal';
 import { Resident, GoogleSheetConfig } from './types/population';
 import { OrgChartConfig } from './types/organization';
 import { INITIAL_MOCK_RESIDENTS } from './data/mockResidents';
 import { loadOrgChartConfig, saveOrgChartConfig } from './services/orgChartStorage';
+import { isAdminSessionActive } from './services/adminAuth';
 import { 
   initAuth, 
   googleSignIn, 
@@ -50,12 +52,24 @@ export default function App() {
     return loadOrgChartConfig();
   });
 
-  // Admin View State
+  // Admin View State & Password Login Modal State
   const [isAdminView, setIsAdminView] = useState<boolean>(false);
+  const [isAdminLoginModalOpen, setIsAdminLoginModalOpen] = useState<boolean>(false);
 
   // Navigation tabs
   const [activeTab, setActiveTab] = useState<HeaderTabType>('overview');
   const [isSheetConfigOpen, setIsSheetConfigOpen] = useState<boolean>(false);
+
+  // Trigger Admin Access with Password Check
+  const handleRequestAdminView = () => {
+    if (isAdminView) {
+      setIsAdminView(false);
+    } else if (isAdminSessionActive()) {
+      setIsAdminView(true);
+    } else {
+      setIsAdminLoginModalOpen(true);
+    }
+  };
 
   // Handle saving updated organization chart
   const handleSaveOrgChart = (updated: OrgChartConfig) => {
@@ -249,7 +263,7 @@ export default function App() {
         onOpenExcelUpload={() => setIsExcelUploadOpen(true)}
         isLoggingIn={isLoggingIn}
         isAdminView={isAdminView}
-        onToggleAdmin={() => setIsAdminView(prev => !prev)}
+        onToggleAdmin={handleRequestAdminView}
       />
 
       {/* Sync Status Banner */}
@@ -303,7 +317,7 @@ export default function App() {
                 activeTab={activeTab}
                 onTabChange={(tab) => setActiveTab(tab)}
                 orgChartConfig={orgChartConfig}
-                onOpenAdmin={() => setIsAdminView(true)}
+                onOpenAdmin={handleRequestAdminView}
               />
             </motion.div>
           )}
@@ -383,6 +397,16 @@ export default function App() {
           hasGoogleSheetConnected={Boolean(sheetConfig && token)}
         />
       )}
+
+      {/* Admin Login Modal (Password Protected) */}
+      <AdminLoginModal
+        isOpen={isAdminLoginModalOpen}
+        onClose={() => setIsAdminLoginModalOpen(false)}
+        onSuccess={() => {
+          setIsAdminLoginModalOpen(false);
+          setIsAdminView(true);
+        }}
+      />
     </div>
   );
 }
