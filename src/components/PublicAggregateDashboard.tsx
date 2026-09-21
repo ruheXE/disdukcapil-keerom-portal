@@ -85,65 +85,81 @@ export const PublicAggregateDashboard: React.FC<PublicAggregateDashboardProps> =
 
   return (
     <div className="space-y-6">
-      {/* Public Civic Info Banner (Logos removed as requested) */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-emerald-950 text-white rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl relative overflow-hidden">
-        <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-        
+      {/* Public Civic Info Banner with Papuan Family & Keerom Landscape Illustration */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-700/80 shadow-2xl p-6 sm:p-7 sm:pb-6 text-white min-h-[220px]">
+        {/* Background Illustration with Elegant Multi-Stage Transparent Gradient Overlay */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+          <img
+            src="/assets/Ilustrasi_Keluarga_Papua_4K_HighRes.svg"
+            alt="Ilustrasi Keharmonisan Keluarga Papua Keerom"
+            className="w-full h-full object-cover object-[center_35%] scale-100 sm:scale-105 transition-transform duration-1000 brightness-95 saturate-110"
+            referrerPolicy="no-referrer"
+          />
+          {/* Lapisan 1: Gradasi horizontal gelap ke transparan untuk keterbacaan teks judul & informasi dinas */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 sm:via-slate-950/75 via-60% to-slate-950/35" />
+          
+          {/* Lapisan 2: Gradasi vertikal untuk dasar tab navigasi bawah dan atas */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-900/35 to-slate-950/50" />
+          
+          {/* Lapisan 3: Aksen hijau zamrud khas Keerom */}
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/40 via-transparent to-emerald-900/25 mix-blend-multiply" />
+        </div>
+
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-3xl flex-1">
+          <div className="space-y-2.5 max-w-3xl flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] font-mono font-bold tracking-widest text-emerald-400 uppercase bg-emerald-950/80 px-2.5 py-0.5 rounded-md border border-emerald-800/60">
+              <span className="text-[10px] font-mono font-bold tracking-widest text-emerald-300 uppercase bg-emerald-950/90 backdrop-blur-xs px-2.5 py-0.5 rounded-md border border-emerald-600/50 shadow-xs">
                 DISDUKCAPIL KABUPATEN KEEROM
               </span>
               <span className="text-xs text-slate-400 hidden sm:inline">•</span>
-              <span className="text-xs text-slate-300 font-medium hidden sm:inline">Provinsi Papua</span>
+              <span className="text-xs text-emerald-200 font-medium hidden sm:inline">Provinsi Papua</span>
               <span className="text-xs text-slate-400 hidden sm:inline">•</span>
-              <span className="text-xs text-slate-400 hidden sm:inline">Kemendagri RI</span>
+              <span className="text-xs text-slate-300 font-medium hidden sm:inline">Kemendagri RI</span>
             </div>
-            <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight leading-tight">
+            <h2 className="text-xl sm:text-3xl font-black text-white tracking-tight leading-tight drop-shadow-md">
               Dinas Kependudukan dan Pencatatan Sipil Kabupaten Keerom
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed max-w-2xl drop-shadow-sm font-medium">
               Portal resmi keterbukaan data agregat kependudukan Pemerintah Kabupaten Keerom. 
-              Menyajikan statistik penduduk, kepemilikan Akta Catatan Sipil, cakupan KTP-el, serta tren dinamika kelahiran dan kematian di seluruh distrik dan kampung.
+              Menyajikan statistik penduduk, kepemilikan Akta Catatan Sipil, cakupan KTP-el, serta tren dinamika kependudukan di seluruh distrik dan kampung.
             </p>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-1 text-xs text-emerald-200/90 font-medium">
-              <div className="flex items-center gap-1.5 bg-slate-800/70 px-2.5 py-1 rounded-lg border border-slate-700/60">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-1 text-xs text-emerald-200 font-medium">
+              <div className="flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-slate-700/80 shadow-xs">
                 <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>Jl. Trans Irian - Arso Kota</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-slate-800/70 px-2.5 py-1 rounded-lg border border-slate-700/60">
+              <div className="flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-slate-700/80 shadow-xs">
                 <Mail className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>Email: disdukcapil@keeromkab.go.id</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-slate-800/70 px-2.5 py-1 rounded-lg border border-slate-700/60">
+              <div className="flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-slate-700/80 shadow-xs">
                 <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>Phone: (0967) 591-234</span>
               </div>
             </div>
           </div>
 
-          {/* SISI KANAN: Aggregated Realtime Badge */}
-          <div className="flex flex-col sm:items-end gap-1 shrink-0 bg-slate-800/80 backdrop-blur-xs p-4 rounded-2xl border border-slate-700/70 text-left sm:text-right w-full sm:w-auto">
+          {/* SISI KANAN: Aggregated Realtime Glassmorphism Badge */}
+          <div className="flex flex-col sm:items-end gap-1 shrink-0 bg-slate-900/85 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-700/90 text-left sm:text-right w-full sm:w-auto shadow-xl">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50" />
               <span>Agregat Terkini</span>
             </div>
-            <span className="text-sm sm:text-base text-slate-100 font-mono font-black">
+            <span className="text-base sm:text-xl text-white font-mono font-black tracking-tight drop-shadow-sm">
               Total {aggregates.totalResidents.toLocaleString('id-ID')} Jiwa Terdata
             </span>
-            <span className="text-[11px] text-slate-400">
+            <span className="text-[11px] text-slate-300 font-medium">
               {aggregates.districts.length} Distrik • {aggregates.villages.length} Kampung
             </span>
-            <div className="mt-1 flex items-center gap-1 text-[10px] text-emerald-400">
-              <ShieldCheck className="w-3 h-3" />
+            <div className="mt-1 flex items-center gap-1.5 text-[10px] text-emerald-300 font-semibold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/60">
+              <ShieldCheck className="w-3 h-3 text-emerald-400" />
               <span>Portal Terbuka Kependudukan Warga</span>
             </div>
           </div>
         </div>
 
         {/* Navigation Sub-Tabs */}
-        <div className="mt-6 pt-5 border-t border-slate-800/80 flex flex-wrap items-center gap-2">
+        <div className="mt-6 pt-5 border-t border-slate-700/60 flex flex-wrap items-center gap-2 relative z-10">
           <button
             onClick={() => setActiveSubTab('overview')}
             className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${

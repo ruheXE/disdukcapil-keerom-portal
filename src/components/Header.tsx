@@ -56,9 +56,20 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleAdmin,
 }) => {
   return (
-    <header className="bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-40 shadow-lg">
+    <header className="bg-slate-950 border-b border-slate-800 text-white sticky top-0 z-40 shadow-lg relative overflow-hidden">
+      {/* Subtle Papua Landscape translucent background with dark gradient overlay */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-25">
+        <img
+          src="/assets/Ilustrasi_Keluarga_Papua_4K_HighRes.svg"
+          alt=""
+          className="w-full h-full object-cover object-[center_30%]"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-slate-950" />
+      </div>
+
       {/* Top Agency Bar with Left Logo, Center Title, and Right Logo */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 relative z-10">
         <div className="flex items-center justify-between gap-2 sm:gap-6">
           
           {/* LOGO 1 (KIRI): Lambang Daerah Kabupaten Keerom (Background Transparan) */}

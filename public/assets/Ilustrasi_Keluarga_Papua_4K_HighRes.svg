@@ -1,0 +1,430 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Sky & Sun Gradients -->
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7dd3fc" />
+      <stop offset="35%" stop-color="#bae6fd" />
+      <stop offset="65%" stop-color="#fed7aa" />
+      <stop offset="100%" stop-color="#fef08a" />
+    </linearGradient>
+    
+    <radialGradient id="sunGlow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="25%" stop-color="#fef08a" stop-opacity="0.9" />
+      <stop offset="55%" stop-color="#fdba74" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#fed7aa" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Mountain Gradients -->
+    <linearGradient id="mountFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a7f3d0" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+
+    <linearGradient id="mountMidLeft" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <linearGradient id="mountMidRight" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#065f46" />
+    </linearGradient>
+
+    <linearGradient id="valleyHills" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#15803d" />
+      <stop offset="50%" stop-color="#166534" />
+      <stop offset="100%" stop-color="#14532d" />
+    </linearGradient>
+
+    <linearGradient id="terraceGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#84cc16" />
+      <stop offset="50%" stop-color="#4d7c0f" />
+      <stop offset="100%" stop-color="#3f6212" />
+    </linearGradient>
+
+    <!-- Ground & Path Gradient -->
+    <linearGradient id="pathGrad" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="40%" stop-color="#b45309" />
+      <stop offset="100%" stop-color="#78350f" />
+    </linearGradient>
+    
+    <linearGradient id="groundSoil" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d97706" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#92400e" />
+    </linearGradient>
+
+    <!-- Honai Thatch Gradients -->
+    <linearGradient id="honaiRoof" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a16207" />
+      <stop offset="50%" stop-color="#78350f" />
+      <stop offset="100%" stop-color="#451a03" />
+    </linearGradient>
+    <linearGradient id="honaiWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#78350f" />
+      <stop offset="100%" stop-color="#3f1a07" />
+    </linearGradient>
+
+    <!-- Skin Tones -->
+    <linearGradient id="skinTone1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8d5b4c" />
+      <stop offset="100%" stop-color="#60382b" />
+    </linearGradient>
+    <linearGradient id="skinTone2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9a6756" />
+      <stop offset="100%" stop-color="#6e4032" />
+    </linearGradient>
+  </defs>
+
+  <!-- SKY BACKGROUND -->
+  <rect width="1920" height="1080" fill="url(#skyGrad)" />
+
+  <!-- GLOWING SUNRISE OVER THE CENTRAL MOUNTAIN PASS -->
+  <circle cx="960" cy="360" r="320" fill="url(#sunGlow)" />
+  <circle cx="960" cy="340" r="75" fill="#fffbeb" opacity="0.95" />
+
+  <!-- MORNING CLOUDS -->
+  <g opacity="0.65">
+    <path d="M 200 180 Q 280 140 380 170 Q 450 130 540 170 Q 620 180 650 220 L 150 220 Z" fill="#ffffff" />
+    <path d="M 1200 150 Q 1300 110 1420 140 Q 1500 100 1620 145 Q 1700 160 1750 200 L 1150 200 Z" fill="#ffffff" />
+    <path d="M 800 240 Q 880 200 980 230 Q 1060 210 1120 250 L 750 250 Z" fill="#ffffff" opacity="0.5" />
+  </g>
+
+  <!-- DISTANT JAGGED PAPUAN MOUNTAINS -->
+  <path d="M 0 480 L 180 380 L 420 450 L 680 320 L 960 380 L 1240 310 L 1520 440 L 1760 360 L 1920 430 L 1920 1080 L 0 1080 Z" fill="url(#mountFar)" opacity="0.7" />
+  <path d="M 0 520 L 320 370 L 620 460 L 840 360 L 960 410 L 1080 350 L 1360 470 L 1680 350 L 1920 480 L 1920 1080 L 0 1080 Z" fill="#059669" opacity="0.65" />
+
+  <!-- MIDGROUND RIDGES & LUSH FOREST SLOPES -->
+  <!-- Left Ridge -->
+  <path d="M 0 320 Q 300 380 520 540 Q 720 680 880 720 L 880 1080 L 0 1080 Z" fill="url(#mountMidLeft)" />
+  <!-- Right Ridge & Terraces -->
+  <path d="M 1920 280 Q 1600 360 1380 520 Q 1180 660 1040 720 L 1040 1080 L 1920 1080 Z" fill="url(#mountMidRight)" />
+
+  <!-- TERRACED HILLS ON THE RIGHT (Keerom agriculture) -->
+  <g opacity="0.9">
+    <path d="M 1320 450 Q 1480 430 1720 340 L 1750 365 Q 1500 460 1310 480 Z" fill="#a3e635" />
+    <path d="M 1240 490 Q 1420 470 1760 380 L 1790 405 Q 1440 500 1230 520 Z" fill="#65a30d" />
+    <path d="M 1160 535 Q 1380 515 1820 420 L 1850 448 Q 1390 550 1145 570 Z" fill="#4d7c0f" />
+    <path d="M 1090 585 Q 1320 560 1880 470 L 1910 500 Q 1330 600 1070 620 Z" fill="#365314" />
+    <!-- Left Terraces -->
+    <path d="M 220 420 Q 420 450 640 520 L 620 545 Q 400 480 200 445 Z" fill="#84cc16" />
+    <path d="M 160 470 Q 380 505 580 580 L 560 605 Q 350 535 140 495 Z" fill="#4d7c0f" />
+    <path d="M 110 520 Q 340 560 520 640 L 500 668 Q 310 590 90 548 Z" fill="#3f6212" />
+  </g>
+
+  <!-- HONAI VILLAGE IN THE MID-RIGHT BACKGROUND -->
+  <g id="honai-village" opacity="0.95">
+    <!-- Honai 1 (small far) -->
+    <path d="M 1220 460 L 1260 410 L 1300 460 Z" fill="url(#honaiRoof)" />
+    <rect x="1230" y="460" width="60" height="25" rx="4" fill="url(#honaiWall)" />
+    
+    <!-- Honai 2 (mid) -->
+    <path d="M 1320 440 L 1370 380 L 1420 440 Z" fill="url(#honaiRoof)" />
+    <rect x="1335" y="440" width="70" height="30" rx="5" fill="url(#honaiWall)" />
+
+    <!-- Honai 3 (cluster center) -->
+    <path d="M 1430 430 L 1485 365 L 1540 430 Z" fill="url(#honaiRoof)" />
+    <rect x="1445" y="430" width="80" height="35" rx="5" fill="url(#honaiWall)" />
+
+    <!-- Honai 4 (cluster right) -->
+    <path d="M 1530 420 L 1590 350 L 1650 420 Z" fill="url(#honaiRoof)" />
+    <rect x="1545" y="420" width="90" height="40" rx="6" fill="url(#honaiWall)" />
+
+    <!-- Honai 5 (foreground right village) -->
+    <path d="M 1260 520 L 1330 440 L 1400 520 Z" fill="url(#honaiRoof)" />
+    <rect x="1280" y="520" width="100" height="45" rx="6" fill="url(#honaiWall)" />
+    <rect x="1315" y="535" width="30" height="30" fill="#1c1917" rx="3" />
+
+    <!-- Honai 6 (Large village hut right) -->
+    <path d="M 1380 500 L 1460 410 L 1540 500 Z" fill="url(#honaiRoof)" />
+    <rect x="1400" y="500" width="120" height="55" rx="7" fill="url(#honaiWall)" />
+    <rect x="1445" y="520" width="35" height="35" fill="#1c1917" rx="3" />
+  </g>
+
+  <!-- LARGE HONAI HOUSES (LEFT & RIGHT FOREGROUND) -->
+  <!-- Left Large Honai -->
+  <g id="honai-left">
+    <!-- Stilts & base -->
+    <rect x="50" y="570" width="15" height="60" fill="#451a03" />
+    <rect x="110" y="570" width="15" height="60" fill="#451a03" />
+    <rect x="180" y="570" width="15" height="60" fill="#451a03" />
+    <rect x="250" y="570" width="15" height="60" fill="#451a03" />
+    <!-- Wooden wall drum -->
+    <path d="M 30 520 C 30 500 290 500 290 520 L 280 580 C 280 600 40 600 40 580 Z" fill="url(#honaiWall)" />
+    <!-- Doorway -->
+    <rect x="130" y="525" width="55" height="55" rx="5" fill="#1c1917" />
+    <!-- Conical Thatch Roof -->
+    <path d="M 160 280 C 160 280 20 460 10 530 C 60 550 260 550 310 530 C 300 460 160 280 160 280 Z" fill="url(#honaiRoof)" />
+    <!-- Thatch texture details -->
+    <path d="M 160 270 L 160 295 M 150 290 L 170 290 M 130 350 L 190 350 M 80 430 L 240 430 M 40 500 L 280 500" stroke="#78350f" stroke-width="4" stroke-linecap="round" />
+  </g>
+
+  <!-- Right Large Honai -->
+  <g id="honai-right">
+    <!-- Stilts & ladder -->
+    <rect x="1650" y="550" width="16" height="70" fill="#451a03" />
+    <rect x="1730" y="550" width="16" height="70" fill="#451a03" />
+    <rect x="1820" y="550" width="16" height="70" fill="#451a03" />
+    <!-- Ladder -->
+    <line x1="1680" y1="620" x2="1695" y2="550" stroke="#78350f" stroke-width="6" />
+    <line x1="1705" y1="620" x2="1720" y2="550" stroke="#78350f" stroke-width="6" />
+    <line x1="1683" y1="600" x2="1708" y2="600" stroke="#78350f" stroke-width="4" />
+    <line x1="1689" y1="575" x2="1714" y2="575" stroke="#78350f" stroke-width="4" />
+    <!-- Drum wall -->
+    <path d="M 1630 490 C 1630 470 1890 470 1890 490 L 1880 560 C 1880 580 1640 580 1640 560 Z" fill="url(#honaiWall)" />
+    <rect x="1720" y="495" width="60" height="60" rx="5" fill="#1c1917" />
+    <!-- Conical Thatch Roof -->
+    <path d="M 1760 270 C 1760 270 1610 440 1600 500 C 1660 520 1860 520 1920 500 C 1910 440 1760 270 1760 270 Z" fill="url(#honaiRoof)" />
+    <!-- Thatch detail -->
+    <path d="M 1760 260 L 1760 285 M 1720 340 L 1800 340 M 1670 410 L 1850 410 M 1630 475 L 1890 475" stroke="#78350f" stroke-width="4" stroke-linecap="round" />
+  </g>
+
+  <!-- TROPICAL PALM TREES & FLORA -->
+  <!-- Left Giant Tree & Palms -->
+  <g id="foliage-left">
+    <!-- Big Left Trunk -->
+    <path d="M -20 0 L 80 0 C 70 200 40 450 0 700 L -40 700 Z" fill="#543310" />
+    <!-- Palm 1 -->
+    <path d="M 280 400 Q 250 250 210 180" stroke="#78350f" stroke-width="12" fill="none" stroke-linecap="round" />
+    <path d="M 210 180 Q 130 160 90 220 M 210 180 Q 180 110 150 90 M 210 180 Q 260 120 290 140 M 210 180 Q 290 190 320 250 M 210 180 Q 230 250 240 280" stroke="#15803d" stroke-width="10" fill="none" stroke-linecap="round" />
+    <!-- Palm 2 -->
+    <path d="M 360 440 Q 330 310 320 240" stroke="#78350f" stroke-width="10" fill="none" stroke-linecap="round" />
+    <path d="M 320 240 Q 250 210 220 270 M 320 240 Q 300 170 270 150 M 320 240 Q 380 180 410 200 M 320 240 Q 400 250 430 300" stroke="#16a34a" stroke-width="8" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- Right Palm Trees -->
+  <g id="foliage-right">
+    <path d="M 1740 380 Q 1770 220 1820 140" stroke="#78350f" stroke-width="14" fill="none" stroke-linecap="round" />
+    <path d="M 1820 140 Q 1730 120 1680 180 M 1820 140 Q 1780 70 1750 50 M 1820 140 Q 1880 80 1920 100 M 1820 140 Q 1910 160 1950 220 M 1820 140 Q 1860 220 1870 260" stroke="#15803d" stroke-width="12" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- DIRT PATH WINDING THROUGH THE VALLEY -->
+  <path d="M 220 1080 L 520 620 Q 750 580 960 560 Q 1160 580 1400 640 L 1700 1080 Z" fill="url(#pathGrad)" />
+  <path d="M 380 1080 L 640 680 Q 820 640 960 620 Q 1100 640 1280 680 L 1540 1080 Z" fill="#d97706" opacity="0.4" />
+
+  <!-- LUSH FOREGROUND BUSHES & NATIVE PAPUAN BLOSSOMS -->
+  <g id="foreground-bushes">
+    <!-- Left tropical plants -->
+    <path d="M -30 1080 Q 40 850 140 800 Q 220 880 280 1080 Z" fill="#14532d" />
+    <path d="M 20 1080 Q 120 880 220 840 Q 300 920 340 1080 Z" fill="#166534" />
+    <path d="M 80 1080 Q 180 940 260 900 Q 340 970 380 1080 Z" fill="#15803d" />
+    <!-- Yellow/Pink Wildflowers Left -->
+    <circle cx="95" cy="880" r="14" fill="#f43f5e" />
+    <circle cx="95" cy="880" r="6" fill="#fef08a" />
+    <circle cx="150" cy="940" r="16" fill="#fbbf24" />
+    <circle cx="150" cy="940" r="6" fill="#78350f" />
+    <circle cx="210" cy="910" r="12" fill="#ec4899" />
+    <circle cx="210" cy="910" r="5" fill="#fef08a" />
+
+    <!-- Right tropical plants -->
+    <path d="M 1950 1080 Q 1880 850 1780 800 Q 1700 880 1640 1080 Z" fill="#14532d" />
+    <path d="M 1900 1080 Q 1800 880 1700 840 Q 1620 920 1580 1080 Z" fill="#166534" />
+    <path d="M 1840 1080 Q 1740 940 1660 900 Q 1580 970 1540 1080 Z" fill="#15803d" />
+    <!-- Wildflowers Right -->
+    <circle cx="1820" cy="880" r="14" fill="#fbbf24" />
+    <circle cx="1820" cy="880" r="6" fill="#78350f" />
+    <circle cx="1760" cy="930" r="16" fill="#f43f5e" />
+    <circle cx="1760" cy="930" r="6" fill="#fef08a" />
+    <circle cx="1700" cy="900" r="12" fill="#fbbf24" />
+    <circle cx="1700" cy="900" r="5" fill="#78350f" />
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- INDIGENOUS PAPUAN FAMILY WALKING HAND-IN-HAND ALONG THE KEEROM SUNLIT PATH -->
+  <!-- ========================================================================= -->
+
+  <!-- 1. GRANDFATHER (TETEK) - Far Left -->
+  <g id="person-grandfather" transform="translate(420, 340)">
+    <!-- Shadow -->
+    <ellipse cx="65" cy="620" rx="45" ry="12" fill="#451a03" opacity="0.35" />
+    <!-- Legs & Trousers -->
+    <path d="M 40 400 L 45 590 L 35 600 L 60 600 L 58 400 Z" fill="#785340" />
+    <path d="M 72 400 L 75 585 L 65 595 L 90 595 L 88 400 Z" fill="#5c3f30" />
+    <!-- Bare Feet -->
+    <ellipse cx="48" cy="600" rx="14" ry="7" fill="url(#skinTone1)" />
+    <ellipse cx="78" cy="595" rx="14" ry="7" fill="url(#skinTone1)" />
+    <!-- Body & Patterned Vest -->
+    <rect x="35" y="220" width="60" height="190" rx="12" fill="#f5ebe0" />
+    <!-- Tribal Batik Motif Vest -->
+    <path d="M 30 220 L 55 220 L 50 400 L 30 400 Z" fill="#a16207" />
+    <path d="M 75 220 L 100 220 L 100 400 L 80 400 Z" fill="#a16207" />
+    <line x1="42" y1="230" x2="42" y2="390" stroke="#fef08a" stroke-width="4" stroke-dasharray="6,6" />
+    <line x1="88" y1="230" x2="88" y2="390" stroke="#fef08a" stroke-width="4" stroke-dasharray="6,6" />
+    <!-- Arms -->
+    <path d="M 30 230 L 15 380 L 10 440" stroke="url(#skinTone1)" stroke-width="20" stroke-linecap="round" fill="none" />
+    <path d="M 95 230 L 130 360 L 160 420" stroke="url(#skinTone1)" stroke-width="20" stroke-linecap="round" fill="none" />
+    <!-- Head & Face -->
+    <circle cx="65" cy="160" r="32" fill="url(#skinTone1)" />
+    <!-- Grey Curly Hair & Beard -->
+    <circle cx="65" cy="140" r="36" fill="#9ca3af" />
+    <circle cx="65" cy="160" r="30" fill="url(#skinTone1)" />
+    <path d="M 45 160 Q 65 210 85 160 Q 65 190 45 160 Z" fill="#e5e7eb" />
+    <!-- Eyes & Gentle Smile -->
+    <circle cx="56" cy="155" r="3.5" fill="#1c1917" />
+    <circle cx="74" cy="155" r="3.5" fill="#1c1917" />
+    <path d="M 58 172 Q 65 180 72 172" stroke="#1c1917" stroke-width="2.5" fill="none" />
+  </g>
+
+  <!-- 2. FATHER (PAPA) - Tall & Strong with Noken Bag -->
+  <g id="person-father" transform="translate(630, 310)">
+    <!-- Shadow -->
+    <ellipse cx="90" cy="650" rx="55" ry="14" fill="#451a03" opacity="0.38" />
+    <!-- Legs & Blue Shorts -->
+    <rect x="55" y="340" width="70" height="110" rx="10" fill="#0284c7" />
+    <!-- Muscular legs -->
+    <path d="M 65 440 L 70 625 L 60 635 L 85 635 L 82 440 Z" fill="url(#skinTone1)" />
+    <path d="M 105 440 L 115 620 L 105 630 L 130 630 L 122 440 Z" fill="url(#skinTone1)" />
+    <!-- Bare Feet -->
+    <ellipse cx="72" cy="635" rx="16" ry="8" fill="url(#skinTone1)" />
+    <ellipse cx="118" cy="630" rx="16" ry="8" fill="url(#skinTone1)" />
+    <!-- Muscular Torso -->
+    <path d="M 50 200 C 45 270 55 350 55 350 L 125 350 C 125 350 135 270 130 200 Z" fill="url(#skinTone1)" />
+    <!-- Traditional Noken Bag Strap across chest -->
+    <path d="M 45 200 Q 85 290 125 370" stroke="#d97706" stroke-width="16" fill="none" stroke-linecap="round" />
+    <path d="M 45 200 Q 85 290 125 370" stroke="#fef08a" stroke-width="6" stroke-dasharray="8,8" fill="none" />
+    <!-- Woven Noken Bag resting on hip -->
+    <path d="M 35 340 C 20 370 20 450 45 470 C 70 480 85 440 85 390 Z" fill="#b45309" />
+    <path d="M 35 360 Q 55 420 75 390" stroke="#fde68a" stroke-width="4" stroke-dasharray="4,4" fill="none" />
+    <!-- Arms holding grandfather & mother -->
+    <path d="M 50 210 L -40 390 L -50 450" stroke="url(#skinTone1)" stroke-width="24" stroke-linecap="round" fill="none" />
+    <path d="M 130 210 L 195 380 L 220 430" stroke="url(#skinTone1)" stroke-width="24" stroke-linecap="round" fill="none" />
+    <!-- Head & Smiling Face -->
+    <circle cx="90" cy="140" r="35" fill="url(#skinTone1)" />
+    <!-- Dark Afro Hair & Beard -->
+    <path d="M 55 130 C 55 80 125 80 125 130 C 125 140 55 140 55 130 Z" fill="#1c1917" />
+    <!-- Neat beard -->
+    <path d="M 70 150 Q 90 185 110 150 Q 90 172 70 150 Z" fill="#1c1917" />
+    <!-- Eyes & Broad Smile -->
+    <circle cx="78" cy="135" r="4" fill="#ffffff" />
+    <circle cx="78" cy="135" r="2.5" fill="#1c1917" />
+    <circle cx="102" cy="135" r="4" fill="#ffffff" />
+    <circle cx="102" cy="135" r="2.5" fill="#1c1917" />
+    <path d="M 78 152 Q 90 166 102 152" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" />
+  </g>
+
+  <!-- 3. MOTHER (MAMA) - Radiant Center in Traditional Pattern Skirt -->
+  <g id="person-mother" transform="translate(870, 320)">
+    <!-- Shadow -->
+    <ellipse cx="80" cy="640" rx="50" ry="13" fill="#451a03" opacity="0.35" />
+    <!-- Black Tank Top -->
+    <path d="M 50 210 L 60 330 L 100 330 L 110 210 Z" fill="#1e293b" />
+    <!-- Beautiful Flared Papuan Patterned Batik Skirt -->
+    <path d="M 58 330 L 25 540 Q 80 570 135 540 L 102 330 Z" fill="#ea580c" />
+    <!-- Ornate tribal geometric patterns on skirt -->
+    <path d="M 35 400 Q 80 420 125 400" stroke="#fef08a" stroke-width="8" fill="none" />
+    <path d="M 30 460 Q 80 490 130 460" stroke="#3b82f6" stroke-width="12" fill="none" />
+    <path d="M 28 510 Q 80 540 132 510" stroke="#fef08a" stroke-width="10" stroke-dasharray="8,6" fill="none" />
+    <!-- Slender Bare Legs -->
+    <path d="M 60 540 L 65 620 L 55 628 L 78 628 L 75 540 Z" fill="url(#skinTone2)" />
+    <path d="M 90 540 L 98 615 L 88 623 L 110 623 L 102 540 Z" fill="url(#skinTone2)" />
+    <!-- Feet -->
+    <ellipse cx="66" cy="628" rx="14" ry="7" fill="url(#skinTone2)" />
+    <ellipse cx="99" cy="623" rx="14" ry="7" fill="url(#skinTone2)" />
+    <!-- Elegant Arms -->
+    <path d="M 50 215 L -20 370 L -45 420" stroke="url(#skinTone2)" stroke-width="18" stroke-linecap="round" fill="none" />
+    <path d="M 110 215 L 150 360 L 175 420" stroke="url(#skinTone2)" stroke-width="18" stroke-linecap="round" fill="none" />
+    <!-- Head & Voluminous Afro with Headband -->
+    <!-- Afro hair -->
+    <circle cx="80" cy="140" r="48" fill="#1c1917" />
+    <!-- Face -->
+    <circle cx="80" cy="148" r="30" fill="url(#skinTone2)" />
+    <!-- Beaded headband -->
+    <path d="M 52 135 Q 80 120 108 135" stroke="#fbbf24" stroke-width="8" fill="none" stroke-linecap="round" />
+    <!-- Eyes, Lashes & Warm Smile -->
+    <circle cx="70" cy="145" r="3.5" fill="#1c1917" />
+    <circle cx="90" cy="145" r="3.5" fill="#1c1917" />
+    <path d="M 68 160 Q 80 172 92 160" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" fill="none" />
+  </g>
+
+  <!-- 4. YOUNG BOY (ANAK LAKI-LAKI) - Joyful & Playful with Mini Noken -->
+  <g id="person-boy" transform="translate(1080, 480)">
+    <!-- Shadow -->
+    <ellipse cx="45" cy="480" rx="35" ry="10" fill="#451a03" opacity="0.35" />
+    <!-- Striped Polo Shirt -->
+    <rect x="25" y="160" width="45" height="70" rx="8" fill="#f59e0b" />
+    <line x1="25" y1="180" x2="70" y2="180" stroke="#ffffff" stroke-width="5" />
+    <line x1="25" y1="200" x2="70" y2="200" stroke="#0284c7" stroke-width="5" />
+    <!-- Blue Shorts -->
+    <rect x="25" y="225" width="45" height="40" rx="6" fill="#0284c7" />
+    <!-- Legs -->
+    <path d="M 32 265 L 35 465 L 28 472 L 48 472 L 44 265 Z" fill="url(#skinTone2)" />
+    <path d="M 52 265 L 58 460 L 50 467 L 70 467 L 64 265 Z" fill="url(#skinTone2)" />
+    <!-- Feet -->
+    <ellipse cx="38" cy="472" rx="12" ry="6" fill="url(#skinTone2)" />
+    <ellipse cx="60" cy="467" rx="12" ry="6" fill="url(#skinTone2)" />
+    <!-- Mini Noken bag strap -->
+    <path d="M 30 165 Q 45 210 60 250" stroke="#78350f" stroke-width="8" fill="none" />
+    <path d="M 20 220 C 12 240 12 270 28 280 C 40 285 45 260 45 240 Z" fill="#92400e" />
+    <!-- Arms -->
+    <path d="M 25 170 L -25 260" stroke="url(#skinTone2)" stroke-width="14" stroke-linecap="round" fill="none" />
+    <path d="M 70 170 L 95 240 L 115 280" stroke="url(#skinTone2)" stroke-width="14" stroke-linecap="round" fill="none" />
+    <!-- Head & Happy Face -->
+    <circle cx="47" cy="115" r="28" fill="#1c1917" />
+    <circle cx="47" cy="120" r="22" fill="url(#skinTone2)" />
+    <circle cx="40" cy="118" r="3" fill="#1c1917" />
+    <circle cx="54" cy="118" r="3" fill="#1c1917" />
+    <path d="M 38 130 Q 47 142 56 130" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- 5. YOUNG GIRL (ANAK PEREMPUAN) - Cute with Braids & Pattern Dress -->
+  <g id="person-girl" transform="translate(1220, 420)">
+    <!-- Shadow -->
+    <ellipse cx="50" cy="540" rx="38" ry="11" fill="#451a03" opacity="0.35" />
+    <!-- Earth-toned Patterned Dress -->
+    <path d="M 35 180 L 15 370 Q 50 390 85 370 L 65 180 Z" fill="#b45309" />
+    <path d="M 22 250 Q 50 265 78 250" stroke="#fef08a" stroke-width="6" fill="none" />
+    <path d="M 18 310 Q 50 330 82 310" stroke="#fef08a" stroke-width="6" stroke-dasharray="5,5" fill="none" />
+    <!-- Legs -->
+    <path d="M 38 370 L 40 525 L 32 532 L 52 532 L 48 370 Z" fill="url(#skinTone2)" />
+    <path d="M 60 370 L 65 520 L 58 527 L 78 527 L 72 370 Z" fill="url(#skinTone2)" />
+    <ellipse cx="42" cy="532" rx="12" ry="6" fill="url(#skinTone2)" />
+    <ellipse cx="68" cy="527" rx="12" ry="6" fill="url(#skinTone2)" />
+    <!-- Arms holding brother and grandmother -->
+    <path d="M 35 190 L -15 320" stroke="url(#skinTone2)" stroke-width="14" stroke-linecap="round" fill="none" />
+    <path d="M 65 190 L 115 320 L 135 360" stroke="url(#skinTone2)" stroke-width="14" stroke-linecap="round" fill="none" />
+    <!-- Head with Braids -->
+    <circle cx="50" cy="125" r="28" fill="#1c1917" />
+    <!-- Braids hanging -->
+    <path d="M 28 130 Q 15 170 20 200 M 72 130 Q 85 170 80 200" stroke="#1c1917" stroke-width="8" stroke-linecap="round" fill="none" />
+    <circle cx="50" cy="130" r="21" fill="url(#skinTone2)" />
+    <circle cx="43" cy="128" r="3" fill="#1c1917" />
+    <circle cx="57" cy="128" r="3" fill="#1c1917" />
+    <path d="M 42 140 Q 50 148 58 140" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- 6. GRANDMOTHER (NENEK) - Far Right in Orange Top & Noken Bag -->
+  <g id="person-grandmother" transform="translate(1380, 350)">
+    <!-- Shadow -->
+    <ellipse cx="65" cy="610" rx="45" ry="12" fill="#451a03" opacity="0.35" />
+    <!-- Warm Orange Blouse -->
+    <path d="M 35 220 L 30 380 L 100 380 L 95 220 Z" fill="#ea580c" />
+    <!-- Traditional Patterned Long Sarong -->
+    <path d="M 30 380 L 22 550 Q 65 570 108 550 L 100 380 Z" fill="#78350f" />
+    <path d="M 25 460 Q 65 480 105 460" stroke="#fef08a" stroke-width="6" stroke-dasharray="6,6" fill="none" />
+    <!-- Bare Feet -->
+    <ellipse cx="48" cy="590" rx="14" ry="7" fill="url(#skinTone1)" />
+    <ellipse cx="82" cy="585" rx="14" ry="7" fill="url(#skinTone1)" />
+    <!-- Large Woven Noken Bag worn diagonally -->
+    <path d="M 40 220 Q 80 320 115 420" stroke="#d97706" stroke-width="12" fill="none" stroke-linecap="round" />
+    <path d="M 95 380 C 115 410 115 480 90 500 C 70 510 60 470 70 420 Z" fill="#b45309" />
+    <!-- Arms -->
+    <path d="M 35 230 L -15 390 L -25 430" stroke="url(#skinTone1)" stroke-width="18" stroke-linecap="round" fill="none" />
+    <path d="M 95 230 L 115 360 L 125 420" stroke="url(#skinTone1)" stroke-width="18" stroke-linecap="round" fill="none" />
+    <!-- Head & Curly Silver-Grey Hair -->
+    <circle cx="65" cy="150" r="34" fill="#9ca3af" />
+    <circle cx="65" cy="155" r="28" fill="url(#skinTone1)" />
+    <!-- Kind smile & crinkles -->
+    <circle cx="56" cy="152" r="3.5" fill="#1c1917" />
+    <circle cx="74" cy="152" r="3.5" fill="#1c1917" />
+    <path d="M 56 168 Q 65 178 74 168" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- AMBIENT WARM SUNSET MIST & SUN RAYS -->
+  <g opacity="0.18">
+    <polygon points="960,340 0,1080 300,1080" fill="#fef08a" />
+    <polygon points="960,340 500,1080 900,1080" fill="#fde047" />
+    <polygon points="960,340 1050,1080 1450,1080" fill="#fde047" />
+    <polygon points="960,340 1600,1080 1920,1080" fill="#fef08a" />
+  </g>
+</svg>
